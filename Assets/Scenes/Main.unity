@@ -560,7 +560,7 @@ GameObject:
   - component: {fileID: 202132960}
   - component: {fileID: 202132959}
   m_Layer: 5
-  m_Name: Button
+  m_Name: OptionsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,7 +919,7 @@ GameObject:
   - component: {fileID: 560920452}
   - component: {fileID: 560920451}
   m_Layer: 5
-  m_Name: Button
+  m_Name: NewCharButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -987,7 +987,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 560920452}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2026808051}
+        m_MethodName: onNewCharacterClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &560920452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,7 +1049,7 @@ GameObject:
   - component: {fileID: 585027233}
   - component: {fileID: 585027232}
   m_Layer: 5
-  m_Name: Button
+  m_Name: LoadCharButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1235,7 +1246,7 @@ GameObject:
   - component: {fileID: 855500723}
   - component: {fileID: 855500722}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ExitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1365,7 +1376,7 @@ GameObject:
   - component: {fileID: 879242384}
   - component: {fileID: 879242383}
   m_Layer: 5
-  m_Name: Button
+  m_Name: PlayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1951,6 +1962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96d4d5fde86ed442a942d97c4c0de50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playButton: {fileID: 879242383}
 --- !u!4 &2026808052
 Transform:
   m_ObjectHideFlags: 0
