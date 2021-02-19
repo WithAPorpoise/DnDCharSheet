@@ -15,4 +15,8 @@ public class GAMEMANAGER : MonoBehaviour
     {
         
     }
+
+    public void onExitClicked(){
+        Debug.Log("Exiting Game. Have a nice day!");
+    }
 }
