@@ -1,24 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GAMEMANAGER : MonoBehaviour
+public class GAMEMANAGER : Singleton<GAMEMANAGER>
 {
-    public static string previousScene = "Main";
-    public static int charactersCount = 0;
+
+    public string PreviousScene = "Main";
+    public int CharactersCount = 0;
+    public Button BackButton;
+    public Button SaveButton;
+    [SerializeField]
+    protected List<PlayerCharacter> NPCList = new List<PlayerCharacter>();
+    [SerializeField]
+    protected PlayerCharacter PC;
     // Start is called before the first frame update
 
     void Start()
     {
         Debug.Log("Game Manager: starting.");
+        SetupIfSetupHasNotRun();
     }
 
     // Update is called once per frame
     void Update()
     {
     }
+
+
+    protected override void Setup(){
+        PC = new PlayerCharacter();
+        if (this.HasNulls()){
+                Debug.LogError(this + "has null values.");
+            }    
+        
+    }
+
+    //public T[] PopulateDropdown<T>(string type){
+    //}
 
     public void OnMainMenuClicked(){
         Debug.Log("Returning to main menu.");
@@ -30,14 +51,14 @@ public class GAMEMANAGER : MonoBehaviour
         
         Debug.Log("Returning to previous scene.");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        previousScene = SceneManager.GetActiveScene().name;
+        PreviousScene = SceneManager.GetActiveScene().name;
     }
 
     public void LoadPreviousScene(string sceneName){
         
         Debug.Log("Returning to previous scene.");
         SceneManager.LoadScene(sceneName);
-        previousScene = SceneManager.GetActiveScene().name;
+        PreviousScene = SceneManager.GetActiveScene().name;
     }
 
     public void LoadNextScene(){
@@ -52,7 +73,20 @@ public class GAMEMANAGER : MonoBehaviour
     public void SaveNewCharacter(InputField CharNameInputField){
         string charName = CharNameInputField.text;
         Debug.Log($"Saving new character named {charName}");
-        charactersCount++;
+        CharactersCount++;
+        string characterPath = Application.persistentDataPath + PC.characterName+ (".json");
+        SaveObjectData<PlayerCharacter>(PC, characterPath);
+    }
+
+    public T LoadObjectData<T>(string path){
+        string jsonString = File.ReadAllText(path);
+        T data = JsonUtility.FromJson<T>(jsonString);
+        return data;
+    }  
+
+    public void SaveObjectData<T>(T obj, string path){
+        string jsonString = JsonUtility.ToJson(obj, true);
+        File.WriteAllText(path,jsonString);
     }
     
     public void OnExitClicked(){
@@ -62,5 +96,12 @@ public class GAMEMANAGER : MonoBehaviour
 
     public void HideWindow(GameObject window){
         window.SetActive(false);
+    }
+
+    public void UpdateRace(string raceName, PlayerCharacter player){
+        
+    }
+    public bool HasNulls(){
+        return(PC==null||BackButton==null||SaveButton==null);
     }
 }
