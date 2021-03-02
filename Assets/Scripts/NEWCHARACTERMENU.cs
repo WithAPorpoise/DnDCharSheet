@@ -12,27 +12,32 @@ public class NEWCHARACTERMENU : MonoBehaviour
     public GameObject SubraceDropdown;
     public GameObject ClassDropdown;
     public GameObject SubclassDropdown;
+    public BaseRaceList baseRaces = new BaseRaceList();
     public BaseClassList baseClasses = new BaseClassList();
     public List<TextAsset> jsonFiles;
 
     // Start is called before the first frame update
     void Start()
     {
-        RaceClassPanel = GameObject.Find("RaceClassPanel");
-        RaceDropdown = RaceClassPanel.transform.Find("RaceDropdown").gameObject;
-        RaceDropdown.GetComponent<Dropdown>().ClearOptions();
-        SubraceDropdown = RaceClassPanel.transform.Find("SubraceDropdown").gameObject;
-        SubraceDropdown.GetComponent<Dropdown>().ClearOptions();
-        ClassDropdown = RaceClassPanel.transform.Find("ClassDropdown").gameObject;
-        ClassDropdown.GetComponent<Dropdown>().ClearOptions();
-        SubclassDropdown = RaceClassPanel.transform.Find("SubclassDropdown").gameObject;
-        SubclassDropdown.GetComponent<Dropdown>().ClearOptions();
-
         if(jsonFiles.Count == 0){
             jsonFiles = new List<TextAsset>(Resources.LoadAll<TextAsset>("Data"));
         }
+
         baseClasses = JsonUtility.FromJson<BaseClassList>(jsonFiles[0].text);
-        
+        baseRaces = JsonUtility.FromJson<BaseRaceList>(jsonFiles[1].text);
+        RaceDropdown = GameObject.Find("RaceDropdown");
+        RaceDropdown.GetComponent<Dropdown>().ClearOptions();
+        //LoadRaces();
+        SubraceDropdown = GameObject.Find("SubraceDropdown");
+        SubraceDropdown.GetComponent<Dropdown>().ClearOptions();
+        SubraceDropdown.SetActive(false);
+        ClassDropdown = GameObject.Find("ClassDropdown");
+        ClassDropdown.GetComponent<Dropdown>().ClearOptions();
+        //LoadClasses();
+        SubclassDropdown = GameObject.Find("SubclassDropdown");
+        SubclassDropdown.GetComponent<Dropdown>().ClearOptions();
+        SubclassDropdown.SetActive(false);
+
         if(SubraceDropdown = null){
         SubraceDropdown = GameObject.Find("SubraceDropdown");
         SubraceDropdown.GetComponent<Dropdown>().ClearOptions();
@@ -46,14 +51,9 @@ public class NEWCHARACTERMENU : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
-/*        if(SubraceDropdown.GetComponent<Dropdown>().isActiveAndEnabled == true && SubraceDropdown.GetComponent<Dropdown>().options.Count <2){
-            PopulateDropdown(SubraceDropdown.GetComponent<Dropdown>(), Resources.LoadAll<CharRace>("Subraces"+RaceDropdown.GetComponent<Dropdown>().value));
-        }
-        if(SubclassDropdown.GetComponent<Dropdown>().isActiveAndEnabled == true && SubclassDropdown.GetComponent<Dropdown>().options.Count <2){
-            PopulateDropdown(SubclassDropdown.GetComponent<Dropdown>(), Resources.LoadAll<CharRace>("Subraces"+ClassDropdown.GetComponent<Dropdown>().value));
-        }
-*/    }
+    { 
+
+    }
 
     void OnEnable(){
     }    
@@ -67,8 +67,8 @@ public class NEWCHARACTERMENU : MonoBehaviour
         }
     }
 
-    public void OnSaveButtonClicked(InputField NameInput){
-        GameManager.SaveNewCharacter(NameInput);
+    public void OnSaveButtonClicked(){
+        GameManager.SaveNewCharacter();
     }
 
     public void PopulateDropdown(Dropdown dropdown, GameObject[] optionsArray){

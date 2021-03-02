@@ -11,7 +11,7 @@ public class PlayerCharacter
 
     public int strength = 0;
     public int dexterity = 0;
-     public int constitution = 0;
+    public int constitution = 0;
     public int intelligence = 0;
     public int wisdom = 0;
     public int charisma = 0;
@@ -29,7 +29,7 @@ public class PlayerCharacter
     public string playerName = "";
     public string playerID = "";
     public string background = "";
-    public string charRace;
+    public string charRace = "";
     public List<ClassLevel> classes = new List<ClassLevel>();
     public List<string> features = new List<string>();
     public List<string> proficiencies = new List<string>();
