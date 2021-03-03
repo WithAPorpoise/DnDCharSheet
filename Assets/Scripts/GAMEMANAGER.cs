@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GAMEMANAGER : Singleton<GAMEMANAGER>
 {
@@ -12,10 +13,13 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     public int CharactersCount = 0;
     public GameObject BackButton;
     public GameObject SaveButton;
+    public GameObject JSONViewer;
+    [SerializeField]
+    protected List<TextAsset> playerFiles;
     [SerializeField]
     protected List<PlayerCharacter> NPCList = new List<PlayerCharacter>();
     [SerializeField]
-    protected PlayerCharacter PC;
+    public PlayerCharacter PC;
     // Start is called before the first frame update
 
     void Start()
@@ -34,9 +38,13 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     }
 
     protected override void Setup(){
+        playerFiles = new List<TextAsset>(Resources.LoadAll<TextAsset>("Data/Saves"));
         PC = new PlayerCharacter();
+        CharactersCount = playerFiles.Count;
         BackButton = GameObject.Find("BackButton");
         SaveButton = GameObject.Find("SaveButton");
+        JSONViewer = GameObject.Find("JSONViewer");
+        
         if (this.HasNulls()){
                 Debug.LogError(this + "has null values.");
             }    
@@ -69,9 +77,10 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         }
         Debug.Log($"Saving new character named {PC.characterName}");
         CharactersCount++;
-        string characterPath = Application.dataPath + "/Resources/Data/Characters/"+ PC.characterName + (".json");
+        string characterPath = Application.dataPath + "/Resources/Data/Saves/"+ PC.characterName + (".json");
         SaveObjectData<PlayerCharacter>(PC, characterPath);
-        LoadPreviousScene();
+        PrintPlayerData();
+        //PrintObjectData<PlayerCharacter>(PC, JSONViewer);
     }
 
     public T LoadObjectData<T>(string path){
@@ -84,6 +93,21 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         string jsonString = JsonUtility.ToJson(obj, true);
         File.WriteAllText(path,jsonString);
     }
+
+    public void PrintPlayerData(){
+        string jsonString  = JsonUtility.ToJson(PC, true);
+        JSONViewer.GetComponent<InputField>().text = jsonString;
+    }
+    /*
+    public void PrintObjectData<T>(T obj, GameObject gameOb){
+        string jsonString  = JsonUtility.ToJson(obj, true);
+        //Text []  textObjects = gameOb.GetComponentsInChildren<Text>();
+        //foreach(var child in textObjects){
+        //        child.text = jsonString;   
+        //}
+        gameOb.GetComponent<Text>().text = jsonString; // does not work?
+    }
+    */
 
     public void HideWindow(GameObject window){
         window.SetActive(false);
@@ -101,7 +125,7 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     }
 
     public void UpdateCharacterData(PlayerCharacter pc, string field, string data){
-        switch(field){
+        switch(field.ToLower()){
                     
                     case "characterName":
                         pc.characterName = data;
@@ -115,7 +139,7 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
                     case "background":
                         pc.background = data;
                     break;
-                    case "charRace":
+                    case "charRace": case"race":
                         pc.charRace = data;
                     break;
                     case "features":
@@ -134,7 +158,7 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     }
 
     public void UpdateCharacterData(PlayerCharacter pc, string field, ClassLevel data){
-            switch (field)
+            switch (field.ToLower())
             {
                 case "level":
                     pc.classes.Add(data);
@@ -147,7 +171,7 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     }
     
     public void UpdateCharacterData(PlayerCharacter pc, string field, int data){
-            switch (field)
+            switch (field.ToLower())
             {
                 case "strength":
                     pc.strength = data;
