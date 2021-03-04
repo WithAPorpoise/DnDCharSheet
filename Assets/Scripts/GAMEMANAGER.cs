@@ -79,7 +79,6 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         CharactersCount++;
         string characterPath = Application.dataPath + "/Resources/Data/Saves/"+ PC.characterName + (".json");
         SaveObjectData<PlayerCharacter>(PC, characterPath);
-        PrintPlayerData();
         //PrintObjectData<PlayerCharacter>(PC, JSONViewer);
     }
 
@@ -113,24 +112,93 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         window.SetActive(false);
     }
 
-    public void UpdateRace(string raceName, PlayerCharacter player){
-
-    }
     public bool HasNulls(){
         return(PC==null||BackButton==null||SaveButton==null);
     }
-        public void OnExitClicked(){
-        Debug.Log("Exiting Game. Have a nice day!");
-        Application.Quit();
+
+    public void OnExitClicked(){
+        if(Application.isEditor){
+            Debug.Log("Exiting Game. Have a nice day!");
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
+        else{
+            Application.Quit();
+        }
     }
 
     public void UpdateCharacterData(PlayerCharacter pc, string field, string data){
         switch(field.ToLower()){
+                    case "strength":
+                    try{
+                    pc.strength = int.Parse(data);
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "dexterity":
+                try{
+                    pc.dexterity = int.Parse(data);
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "constitution":
+                try{
+                    pc.constitution = int.Parse(data);
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "intelligence":
+                try{
+                    pc.intelligence = int.Parse(data);
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "wisdom":
+                try{
+                    pc.wisdom = int.Parse(data);
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "charisma":
+                try{
+                    pc.charisma = int.Parse(data);
                     
-                    case "characterName":
+                    }
+                    catch(System.FormatException e){Debug.LogError(e.Message);}
+                    break;
+                case "speed":
+                    pc.speed = float.Parse(data);
+                    break;
+                case "proficiency":
+                    pc.proficiency = int.Parse(data);
+                    break;
+                case "height":
+                    pc.height = int.Parse(data);
+                    break;
+                case "weight":
+                    pc.weight = int.Parse(data);
+                    break;
+                case "hitdie":
+                    pc.hitDie = int.Parse(data);
+                    break;
+                case "money":
+                    pc.money = int.Parse(data);
+                    break;
+                case "health":
+                    pc.health = int.Parse(data);
+                    break;
+                case "maxhealth":
+                    pc.maxHealth = int.Parse(data);
+                    break;
+                    case "xp":
+                    pc.xp = int.Parse(data);
+                    break;
+                    case "maxxp":
+                    pc.maxXp = int.Parse(data);
+                    break;
+                    case "charactername":
                         pc.characterName = data;
                     break;
-                    case "playerName":
+                    case "playername":
                         pc.playerName = data;
                     break;
                     case "playerID":
@@ -139,8 +207,22 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
                     case "background":
                         pc.background = data;
                     break;
-                    case "charRace": case"race":
+                    case "charrace": case"race":
                         pc.charRace = data;
+                    break;
+                    case "subrace":
+                        pc.subrace = data;
+                    break;
+                    case "class":
+                        if(pc.classes.Count == pc.level){
+                            pc.classes.Add(data);
+                        }
+                        else{
+                            pc.classes[pc.level] = data;
+                        }
+                    break;
+                    case "subclass":
+                        pc.subclasses.Add(data);
                     break;
                     case "features":
                         pc.features.Add(data);
@@ -151,74 +233,20 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
                     case "spells":
                         pc.spells.Add(data);
                     break;
+                    case "items":
+                        pc.items.Add(data);
+                    break;
                     default:
                         Debug.LogError("Character Update: This string field does not exist.");
                     break;
                 }
     }
-
-    public void UpdateCharacterData(PlayerCharacter pc, string field, ClassLevel data){
-            switch (field.ToLower())
-            {
-                case "level":
-                    pc.classes.Add(data);
-                break;
-                default:
-                    Debug.LogError("Character Update: This class level field does not exist.");
-                break;
-            }
-        
-    }
     
-    public void UpdateCharacterData(PlayerCharacter pc, string field, int data){
-            switch (field.ToLower())
-            {
-                case "strength":
-                    pc.strength = data;
-                    break;
-                case "dexterity":
-                    pc.dexterity = data;
-                    break;
-                case "constitution":
-                    pc.constitution = data;
-                    break;
-                case "intelligence":
-                    pc.intelligence = data;
-                    break;
-                case "wisdom":
-                    pc.wisdom = data;
-                    break;
-                case "charisma":
-                    pc.charisma = data;
-                    break;
-                case "speed":
-                    pc.speed = data;
-                    break;
-                case "proficiency":
-                    pc.proficiency = data;
-                    break;
-                case "height":
-                    pc.height = data;
-                    break;
-                case "hitDie":
-                    pc.hitDie = data;
-                    break;
-                case "level":
-                    pc.level = data;
-                    break;
-                case "money":
-                    pc.money = data;
-                    break;
-                case "health":
-                    pc.health = data;
-                    break;
-                case "maxHealth":
-                    pc.maxHealth = data;
-                    break;
-                default:
-                    Debug.LogError("Character Update: This integer field does not exist.");
-                break;
-            
-        }
+    public int RollDie(int die){
+        return (int)Mathf.Ceil(Random.Range(0.0f, 1.0f) * die);
+    }
+
+    public void UpdateLevel(PlayerCharacter pc){
+        pc.level = pc.classes.Count;
     }
 }

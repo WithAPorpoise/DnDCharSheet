@@ -19,4 +19,5 @@ public class RaceTraits
     public int youth;
     public int adult;
     public int elder;
+    public string description;
 }

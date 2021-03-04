@@ -8,6 +8,18 @@ TagManager:
   - class
   - playerName
   - characterName
+  - strength
+  - dexterity
+  - constitution
+  - intelligence
+  - wisdom
+  - charisma
+  - subrace
+  - subclass
+  - features
+  - skills
+  - height
+  - weight
   layers:
   - Default
   - TransparentFX

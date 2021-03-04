@@ -17,6 +17,13 @@ public class BaseRaceList
                     propertyList.Add(race.primaryRace);
                 }
             break;
+            case "description":case "desc":case "descriptions":
+                foreach (var race in raceList)
+                {
+                    propertyList.Add(race.description);
+                }
+            break;
+            
             default:
                     Debug.LogError("This property implementation is not available yet.");
             break;
