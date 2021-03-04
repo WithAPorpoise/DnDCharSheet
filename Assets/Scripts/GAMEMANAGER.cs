@@ -31,6 +31,7 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
     // Update is called once per frame
     void Update()
     {
+        UpdateCharacterCount();
     }
 
     void OnEnable(){
@@ -41,6 +42,8 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         playerFiles = new List<TextAsset>(Resources.LoadAll<TextAsset>("Data/Saves"));
         PC = new PlayerCharacter();
         CharactersCount = playerFiles.Count;
+        
+        UpdateCharacterCount();
         BackButton = GameObject.Find("BackButton");
         SaveButton = GameObject.Find("SaveButton");
         JSONViewer = GameObject.Find("JSONViewer");
@@ -79,6 +82,9 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
         CharactersCount++;
         string characterPath = Application.dataPath + "/Resources/Data/Saves/"+ PC.characterName + (".json");
         SaveObjectData<PlayerCharacter>(PC, characterPath);
+        UnityEditor.AssetDatabase.Refresh();
+        playerFiles = new List<TextAsset>(Resources.LoadAll<TextAsset>("Data/Saves"));
+        UpdateCharacterCount();
         //PrintObjectData<PlayerCharacter>(PC, JSONViewer);
     }
 
@@ -248,5 +254,8 @@ public class GAMEMANAGER : Singleton<GAMEMANAGER>
 
     public void UpdateLevel(PlayerCharacter pc){
         pc.level = pc.classes.Count;
+    }
+    private void UpdateCharacterCount(){
+        CharactersCount = playerFiles.Count;
     }
 }

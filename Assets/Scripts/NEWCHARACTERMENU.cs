@@ -15,7 +15,6 @@ public class NEWCHARACTERMENU : MonoBehaviour
     public GameObject RaceDropdown;
     public GameObject SubraceDropdown;
     public GameObject ClassDropdown;
-    public GameObject SubclassDropdown;
     public GameObject StrengthDropdown;
     public GameObject DexterityDropdown;
     public GameObject ConstitutionDropdown;
@@ -51,9 +50,6 @@ public class NEWCHARACTERMENU : MonoBehaviour
         ClassDropdown.GetComponent<Dropdown>().AddOptions(new List<string>(){"Choose Option"});
         
         ClassDropdown.GetComponent<Dropdown>().AddOptions(baseClasses.GetListOfProperty("names"));
-        SubclassDropdown = GameObject.Find("SubclassDropdown");
-        SubclassDropdown.GetComponent<Dropdown>().ClearOptions();
-        SubclassDropdown.SetActive(false);
 
         StrengthDropdown = GameObject.Find("StrengthDropdown");
         DexterityDropdown = GameObject.Find("DexterityDropdown");
@@ -85,12 +81,6 @@ public class NEWCHARACTERMENU : MonoBehaviour
             SubraceDropdown.SetActive(false);
             RaceDescription.SetActive(false);
         }
-        if(!SubclassDropdown.activeSelf && ClassDropdown.transform.GetChild(0).gameObject.GetComponent<Text>().text != "Choose Option" ){            
-            SubclassDropdown.SetActive(true);
-        }
-        if(SubclassDropdown.activeSelf && ClassDropdown.transform.GetChild(0).gameObject.GetComponent<Text>().text == "Choose Option" ){            
-            SubclassDropdown.SetActive(false);
-        }
     }
 
     void OnEnable(){
@@ -109,7 +99,6 @@ public class NEWCHARACTERMENU : MonoBehaviour
         UpdateNewCharacter(RaceDropdown.transform.GetChild(0).gameObject);
         UpdateNewCharacter(SubraceDropdown.transform.GetChild(0).gameObject);
         UpdateNewCharacter(ClassDropdown.transform.GetChild(0).gameObject);
-        UpdateNewCharacter(SubclassDropdown.transform.GetChild(0).gameObject);
         UpdateNewCharacter(StrengthDropdown.transform.GetChild(0).gameObject);
         UpdateNewCharacter(DexterityDropdown.transform.GetChild(0).gameObject);
         UpdateNewCharacter(ConstitutionDropdown.transform.GetChild(0).gameObject);
@@ -186,11 +175,14 @@ public class NEWCHARACTERMENU : MonoBehaviour
         List<int> abilitiesList = new List<int>();
         for(int i = 0; i< 6; i++){
             List<int> currentRolls = new List<int>();
-            for(int j=0; j<4; j++){
-                currentRolls.Add(GameManager.RollDie(6));
+            for(int j=0; j<7; j++){
+                currentRolls.Add(GameManager.RollDie(4));
             }
             currentRolls.Sort();
             currentRolls.Remove(currentRolls[0]);
+            currentRolls.Remove(currentRolls[1]);
+            currentRolls.Remove(currentRolls[2]);
+            currentRolls.Remove(currentRolls[3]);
             int sum = 0;
             foreach (var item in currentRolls)
             {
@@ -199,6 +191,12 @@ public class NEWCHARACTERMENU : MonoBehaviour
             abilitiesList.Add(sum);
         }
         dieRolls = abilitiesList;
+    }
+
+    public void SetModifier(GameObject textObj){
+        Text textRef = textObj.GetComponent<Text>();
+        
+
     }
 
     public string GetRaceTrait(string trait){
@@ -230,9 +228,6 @@ public class NEWCHARACTERMENU : MonoBehaviour
 
             break;
             case "prof": case "proficiency": case "proficiencies":
-
-            break;
-            case "subclasses": case "subclass":
 
             break;
             case "maxhp": case "maxhealth":
@@ -304,5 +299,30 @@ public class NEWCHARACTERMENU : MonoBehaviour
 
     public void UpdateClassDescription(GameObject textObj){
         
+        Text textRef = textObj.GetComponent<Text>();
+        List<string> classNames = baseClasses.GetListOfProperty("names");
+        List<string> classDescs = baseClasses.GetListOfProperty("descriptions");
+        if(textRef != null){
+            int i = 0;
+            while(i<classNames.Count){
+                if (ClassDropdown.transform.GetChild(0).gameObject.GetComponent<Text>().text ==classNames[i]){
+                    textRef.text = classDescs[i];
+                }
+                i++;
+            }
+        }
+        else
+        {
+            TMPro.TextMeshProUGUI TMPRef = textObj.GetComponent<TMPro.TextMeshProUGUI>();
+            int i =0;
+            while(i<classNames.Count){
+                if (ClassDropdown.transform.GetChild(0).gameObject.GetComponent<Text>().text ==classNames[i]){
+                    textRef.text = classDescs[i];
+                }
+                i++;
+            }
+
+        }
     }
+
 }

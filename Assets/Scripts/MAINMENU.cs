@@ -7,13 +7,12 @@ using UnityEngine.SceneManagement;
 public class MAINMENU : MonoBehaviour
 {
     public Button playButton;
-    public Object GameManager;
-    public static int charactersCount = 0;
+    public GAMEMANAGER GameManager;
     // Start is called before the first frame update
     void Start()
     {
-        if(charactersCount == 0){
-            if(playButton){playButton.interactable = false;}
+        if(playButton){
+            if(GameManager.CharactersCount == 0){playButton.interactable = false;}
         }
         
     }
@@ -22,9 +21,13 @@ public class MAINMENU : MonoBehaviour
     void Update()
     {
         if(playButton){
-            if(playButton.interactable == false && charactersCount > 0){
+            if(playButton.interactable == false && GameManager.CharactersCount > 0){
                 playButton.interactable = true;
             }
+            if(playButton.interactable == true && GameManager.CharactersCount < 1){
+                playButton.interactable = false;
+            }
+            
         }
         
     }

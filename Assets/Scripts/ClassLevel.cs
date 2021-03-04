@@ -6,15 +6,17 @@ using UnityEngine;
 public class ClassLevel
 {
     public string className;
+    public string classFeatures;
+    public string description;
     public int level;
     public int proficiencyBonus;
-    public string classFeatures;
     public int infusionsKnown;
-    public int rages;
-    
+    public int rages;    
     public int rageDamage;
     public int martialArts1D;
     public int kiPoints;
+    public int sneakAttackd6;
+    public int sorceryPoints;
     public int unarmoredMovement;
     public int spellSlots;
     public int slotLevel;
